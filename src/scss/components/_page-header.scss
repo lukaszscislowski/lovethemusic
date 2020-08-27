@@ -1,0 +1,41 @@
+.page-header {
+    position: fixed; //przypięty do góry
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 1.5rem 0;
+}
+.page-header .container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.page-header-logo {
+    display: block;
+}
+.page-header-logo img {
+    max-width: 12rem;
+    height:auto;
+    display: block;
+}
+.page-header.sticky {
+    background: #000;
+    box-shadow: 0 0.1rem 0.8rem rgba(#000, 0.5);
+    padding: 0.5rem 0;
+}
+
+@media (max-width:760px) {
+    .page-header {
+        position: absolute;
+    }
+    .page-header.sticky { //tutaj już header nie jest przyklejony więc nie ma sensu go zmieniać
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .page-header .container {
+        flex-direction: column;
+    }
+}

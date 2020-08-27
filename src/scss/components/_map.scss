@@ -1,0 +1,31 @@
+
+.map-wrapper {
+    display: grid;
+    min-height: 100vh;
+    background: $color-main;
+}
+
+#map {
+    background: #eee;
+    height:100%;
+    border:3px solid #fff;
+    box-sizing: border-box;
+}
+
+.clear-map {
+    position: absolute;
+    
+    background: #E33D3D;
+    border:0;
+    
+    color:#fff;
+    font-size:14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: sans-serif;
+    transition:0.3s background-color;
+    cursor: pointer;
+}
+.clear-map:hover {
+    background: #B21A1A;
+}

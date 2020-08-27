@@ -1,0 +1,57 @@
+.main-banner-sec {
+    $c1 : rgba(black, 0.8);
+    $c2 : rgba(black, 0.85); //kolor przyciemnienia
+
+    min-height: 500px;
+    // height: calc(100vh + 5rem);
+    background-color: #202020;
+    background-image:
+    linear-gradient($c1, $c1),
+    linear-gradient(90deg, rgba(rgb(22, 22, 22), 0.4), rgba(rgb(10, 10, 10), 0.1), rgba(rgb(10, 10, 10), 0.4)),
+    url(../images/banner-paralax.jpg);
+    background-size: cover;
+    background-repeat: repeat, no-repeat;
+    background-position: center bottom;
+    background-attachment:scroll, fixed;
+    display: grid;
+    grid-template-rows:8fr 8fr;
+    grid-template-areas: 
+        "header"
+        "content"
+    ;
+    align-items: center;
+    justify-items: center;
+}
+
+@media (max-width:760px) {
+    .main-banner-sec {
+        grid-template-rows: 8fr 8fr;
+    }
+}
+
+.main-banner-sec-title {
+    grid-area: header;
+    align-self: end;
+    text-transform: uppercase;
+    font-size: 3.75rem;
+    font-weight: 100;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    
+}
+.main-banner-sec span {
+    color: $color-main;
+}
+
+.main-banner-sec-text {
+    grid-area: content;
+    align-self: start;
+    max-width: 100rem;
+    padding-left: 1.6rem;
+    padding-right: 1.6rem;
+    font-size: 1.8rem;
+    color: rgba(80, 79, 79, 0.8);
+}

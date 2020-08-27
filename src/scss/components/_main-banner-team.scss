@@ -1,0 +1,92 @@
+.main-banner-team {
+    min-height: 950px;
+    // height: calc(100vh + 5rem);
+    display: grid;
+    grid-gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-rows: repeat(2, 1fr);
+    padding: 0 20rem ;
+    padding-bottom: 10rem;
+    background: rgba(32, 28, 28, 0.2);
+    align-items: center;
+   
+}
+@media (max-width:760px) {
+    .main-banner-team {
+        min-height: 700vh;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        padding: 0;
+    }
+    .card-team img {
+        width: 50%;
+    }
+}
+
+.team-header {
+    grid-column: 1 / -1;
+}
+.team-header span {
+    border-bottom: 2px solid $color-main;
+    width: 100px;
+    padding-top: 2rem;
+}
+
+.team-header-title {
+
+}
+.team-header-title-sec {
+    display: flex;
+    align-content: flex-start;
+    text-transform: uppercase;
+    font-size: 4rem;
+    margin: 0;
+   
+}
+
+.card-team {
+    display: grid;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    grid-gap: 5px;
+    padding-bottom: 2rem;
+    
+   
+
+}
+
+.card-team img {
+    width: 100%;
+    border-radius: 50%;
+}
+.card-team-title {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 2rem;
+}
+.card-team-text {
+    width: 80%;
+    text-align: center;
+    color: rgba(80,79,79,.8);
+}
+
+.box-team-button {
+    grid-column: span 1;
+    grid-row: 6;
+    width: 75%;
+    cursor: pointer;
+    height: 3em;
+    border: 3px solid #202020;
+    border-radius: 40px;
+    background: transparent;
+    color: #202020;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 700;
+    transition: 0.5s all;
+}
+
+.box-team-button:hover {
+    background: #202020;
+    color: white;
+}

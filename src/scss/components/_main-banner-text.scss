@@ -1,0 +1,39 @@
+.main-banner-letter-type-1 {
+    fill-opacity: 0;
+    fill: $color-main;
+    stroke: $color-main;
+}
+.main-banner-letter-type-2 {
+    fill-opacity: 0;
+    fill: #FFFFFF;
+    stroke: #FFFFFF;
+}
+
+$offset : 400 400 620 510 400 610 460 880 600 570 320 580;
+
+@for $i from 1 through length($offset) {
+    .main-banner-letter-#{$i} {
+
+        $strokeDelay : (1 + 0.3 * $i) * 1s;
+        $fillDelay : (2.5 + 0.3 * $i) * 1s;
+
+        stroke-dashoffset: nth($offset, $i);
+        stroke-dasharray : nth($offset, $i);
+        animation: animMainBannerStroke 0.5s $strokeDelay 1 linear forwards,
+                   animMainBannerTitleFill 1s $fillDelay 1 linear forwards;
+    }
+}
+
+@keyframes animMainBannerStroke {
+    100% { stroke-dashoffset:0; }
+}
+
+@keyframes animMainBannerTitleFill {
+    0% { fill-opacity: 0; }
+    100% { fill-opacity: 1; }
+}
+
+.main-banner-svg-img {
+    opacity: 0.2;
+    mask: url(#mainBannerSvgMask);
+}
