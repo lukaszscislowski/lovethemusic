@@ -1,8 +1,8 @@
 
  export default function() { }
+ 
 $(function() {
-    var $inputs = $('form input[required], form textarea[required], select[required]');
-    console.log($inputs);
+    var $inputs = $('form input[required], form textarea[required]');
     var displayFieldError = function($elem) {
         var $fieldRow = $elem.closest('.form-row');
         var $fieldError = $fieldRow.find('.field-error');
@@ -68,7 +68,11 @@ $(function() {
         //jeżeli wszystkie pola są poprawne...
         if (checkFieldsErrors($inputs)) {
             var dataToSend = $form.serializeArray();
-
+            dataToSend = dataToSend.concat(
+                $form.find().map(function() {
+                    return {"name": this.name, "value": this.value}
+                }).get()
+            );
             var $submit = $form.find('input:submit');
             $submit.prop('disabled', 1);
             $submit.addClass('element-is-busy');

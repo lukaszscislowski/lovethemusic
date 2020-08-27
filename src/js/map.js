@@ -1,16 +1,27 @@
 export default function() { }
 
 (function() {
-    var map = null; //mapa google
-    var markers = [];
-    var mapTooltip = null;
-    var mapLines = [];
-    var centerMap = false;
-    var mapInterval = 1000 * 3;
-    var newMarkersData = [];
+    var socket = io(); //biblioteka socket
+    var mapInterval = 1000 * 3; //sprawdzamy co 3 sekundy
+    var map = null; 	// obiekt globalny
+    var mapTooltip = null; 	//okno z informacjami
+    var newMarkersData = []; //nowo wczytywane markery
+    var markers = []; //markery na mapie
+    var mapLines = []; //linie na mapie
 
+    function createMap() {
+        var mapOptions = {
+            zoom: 10,
+            zoomControl: true,
+            streetViewControl: true,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center: new google.maps.LatLng(52.24755, 21.02418),
+            disableDefaultUI: true
+        };
+        map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        mapTooltip = new google.maps.InfoWindow();
+    }
 
-    
     function clearMarkers() {
         markers.forEach(function(el, i) {
             el.setMap(null);
@@ -39,47 +50,20 @@ export default function() { }
         map.setCenter( bounds.getCenter() );
     }
 
-    function drawLineBetweenNewMarkers(markersData) {
-        var linesCoordinates = [];
-
-        //bede rysowal linie miedzy ostatnim markerem a pierwszym z nowo wczytanych
-        if (markers.length) {
-            linesCoordinates.push({
-                lat : markers[markers.length-1].getPosition().lat(),
-                lng : markers[markers.length-1].getPosition().lng()
-            })
-        }
-
-        //nowo wczytane...
-        markersData.forEach(function(el, i) {
-            linesCoordinates.push({
-                lat : el.lat,
-                lng : el.lng
+    function createNewMarkers(data) {
+        data.forEach(function(el, i) {
+            var newMarker = createSingleMarker({
+                'lat' : el.lat,
+                'lng' : el.lng,
+                'iconUrl' : el.iconUrl,
+                'time' : el.time,
+                'text' : markers.length + i + 1
             });
-        });
-
-        var line = new google.maps.Polyline({
-            path: linesCoordinates, //przekazuję powyżej zebrane markery
-            geodesic: true,
-            strokeColor: '#DB3737',
-            strokeOpacity: 0.7,
-            strokeWeight: 2
-        });
-
-        line.setMap(map);
-
-        mapLines.push(line);
-    }
-
-    function createNewMarkers(markersData) {
-        markersData.forEach(function(el, i) {
-            var newMarker = createSingleMarker(el);
             markers.push(newMarker);
         });
     }
 
     function createSingleMarker(ob) {
-        //okreslenie grafiki markera
         var image = {
             url: ob.iconUrl,
             size: new google.maps.Size(39, 36), //rozmiar ikony
@@ -88,13 +72,11 @@ export default function() { }
             labelOrigin: new google.maps.Point(19, 15) //pozycja teksty labelki
         };
 
-        //ksztalt klikalnej powierzchni markera
         var shape = {
             coords: [1, 1, 1, 20, 18, 20, 18, 1],
             type: 'poly'
         };
 
-        //każdy marker będzie miał numer porządkowy. Poniżej go tworzymy
         var label = new MarkerWithLabel({
             color : '#fff',
             fontFamily : 'sans-serif',
@@ -103,7 +85,6 @@ export default function() { }
             text : '' + ob.text
         });
 
-        //tworzymy marker z powyższymi danymi
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(ob.lat, ob.lng),
             icon: image,
@@ -111,11 +92,10 @@ export default function() { }
             shape: shape,
             label: label,
             labelOrigin: new google.maps.Point(26.5, 20),
-            zIndex: 1
+            zIndex: 10000 - (ob.lat * 1000) //moze tutaj jest inna metoda?
         });
-        marker.txt = 'Godzina:<br />' + ob.time + '<br />' + ob.lat + '-' + ob.lng;
+        marker.txt = '<strong>Godzina:</strong><br />' + ob.time + '<br />' + ob.lat + '-' + ob.lng;
 
-        //tworzymy pokazywanie dymka po kliknięciu na marker
         google.maps.event.addListener(marker, "click", function() {
             mapTooltip.setPosition(marker.getPosition());
             mapTooltip.setContent(marker.txt);
@@ -125,85 +105,60 @@ export default function() { }
         return marker;
     }
 
+    function drawLineBetweenNewMarkers(data) {
+        var linesCoordinates = [];
 
-    function createMap() {
-        var mapOptions = {
-            zoom: 10,
-            zoomControl: true,
-            streetViewControl: true,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            center: new google.maps.LatLng(52.229676, 21.012229),
-            disableDefaultUI: true
-        };
-        map = new google.maps.Map(document.getElementById("map"), mapOptions);
-        mapTooltip = new google.maps.InfoWindow();
-    }
+        //bede rysowal linie miedzy ostatnim markerem a nowymi
+        if (markers.length) {
+            linesCoordinates.push({
+                lat : markers[markers.length-1].getPosition().lat(),
+                lng : markers[markers.length-1].getPosition().lng()
+            })
+        }
 
-    function loadNewMarkers() {
-        var deffer = jQuery.Deferred();
-        var newMarkersData = [];
-
-        $.ajax({
-            type: "GET",
-            url: 'generate_coords.php',
-            dataType: "json",
-            cache: false,
-            success: function (json) {
-                json.data.forEach(function(el, i) {
-                    if (!markers.length || (markers.length && (markers[markers.length-1].getPosition().lat() !== el.lat || markers[markers.length-1].getPosition().lng() !== el.lng))) {
-                        newMarkersData.push({
-                            'lat' : el.lat,
-                            'lng' : el.lng,
-                            'iconUrl' : el.iconUrl,
-                            'time' : el.time,
-                            'text' : markers.length + i + 1
-                        });
-                    }
-                });
-
-                deffer.resolve(newMarkersData);
-            },
-            error: function() {
-                deffer.reject();
-            }
+        //oraz miedzy nowymi
+        data.forEach(function(el, i) {
+            linesCoordinates.push({
+                lat : Number(el.lat),
+                lng : Number(el.lng)
+            });
         });
 
-        return deffer.promise();
-    }
-
-    function createNewMarkers(markersData) {
-        markersData.forEach(function(el, i) {
-            var newMarker = createSingleMarker(el);
-            markers.push(newMarker);
+        var line = new google.maps.Polyline({
+            path: linesCoordinates,
+            geodesic: true,
+            strokeColor: '#DB3737',
+            strokeOpacity: 0.8,
+            strokeWeight: 2
         });
+
+        line.setMap(map);
+        mapLines.push(line);
     }
 
-    function mainLoop() {
-        $.when(loadNewMarkers()).then(function(newMarkers) {
-            drawLineBetweenNewMarkers(newMarkersData);
-            createNewMarkers(newMarkersData);
 
-            if (markers.length && !centerMap) {
-                centerCanvas();
-                if (markers.length >=2) {
-                    centerMap = true;
-                }
-            }
-            setTimeout(function() {
-                mainLoop();
-            }, mapInterval)
-        }, function(error) {
-            console.warn('Błąd wczytania danych');
-        });
-    }
     $(function() {
         createMap();
-        mainLoop();
-    });
 
-    $('.clear-map').on('click', function(el) {
-        clearLines();
-        clearMarkers();
-        centerMap = false;
-    });
+        var centerMap = false;
+        socket.on('dataMapEvent', function(res){
+            drawLineBetweenNewMarkers(res);
+            createNewMarkers(res);            
+            
+            //centrujemy przy 1, potem juz nie centrujemy
+            //poniewaz powodowalo by to, ze uzytkownik nie mogl by przesuwac mapy
+            if (markers.length && !centerMap) {
+                centerCanvas();    
+                if (markers.length >=2) {
+                    centerMap = true;            
+                }
+            }            
+        });            
+
+        $('.clear-map').on('click', function(el) {
+            clearLines();
+            clearMarkers();
+            centerMap = false;
+        });
+    })
 })();

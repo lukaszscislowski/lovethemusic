@@ -9,6 +9,7 @@ const wait          = require("gulp-wait");
 const csso          = require("gulp-csso");
 const browserSync   = require("browser-sync").create();
 const webpack       = require("webpack");
+const connect       = require("gulp-connect-php");
 
 
 const showError = function(err) {
@@ -72,6 +73,8 @@ const watch = function() {
     gulp.watch("src/scss/**/*.scss", gulp.series(css));
     gulp.watch("src/js/**/*.js", gulp.series(js));
     gulp.watch("dist/**/*.html").on("change", browserSync.reload);
+    gulp.watch("dist/**/*.php").on('change', browserSync.reload);
+    
 }
 
 const startText = function(cb) {
@@ -85,6 +88,18 @@ const startText = function(cb) {
     console.log(colors.blue('Start :)'))
     cb();
 }
+
+// var gulp = require('gulp'),
+//   connect = require('gulp-connect');
+ 
+// gulp.task('connect', function() {
+//   connect.server();
+// });
+ 
+// gulp.task('default', ['connect']);
+ 
+  
+
 
 exports.default = gulp.series(startText, css, js, server, watch);
 exports.css = css;

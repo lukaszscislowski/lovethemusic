@@ -1,5 +1,5 @@
 <?php
-$mailToSend = 'lukas.scislowski@gmail.com';
+$mailToSend = 'kontakt@fundacjabruk.pl';
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 	$name       = $_POST['name'];
 	$email      = $_POST['email'];
@@ -17,12 +17,13 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 	}
 
 	if ( count( $errors ) > 0 ) {
+		
 		$return['errors'] = $errors;
 	} else {
 		$headers = 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-		$headers .= 'From: lukas.scislowski@gmail.com'  . "\r\n";
-		$headers .= 'Reply-to: ' . $email;
+		$headers .= 'From: '. $email ."\r\n";
+        $headers .= 'Reply-to: '. $email;
 		$message = "
 			<html>
 			<head>
@@ -45,6 +46,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 			$return['status'] = 'ok';
 		} else {
 			$return['status'] = 'error';
+			error_reporting(E_ALL);
 		}
 	}
 

@@ -7,10 +7,10 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.rawgit.com/googlemaps/v3-utility-library/infobox/1.1.13/src/infobox_packed.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:100,400,700&subset=latin-ext" rel="stylesheet">
-        <script async defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false" type="text/javascript"></script>
+        <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKiZLB_acM19NfL_7YJBttDXWahkqgeKk"></script>
         <link rel="stylesheet" href="css/style.min.css">
         <script src="js/bundle.min.js" defer></script>
     </head>
@@ -155,7 +155,7 @@
                 <span></span>
             </div>
             <div class="form-text"><p class="paragraph"> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ea nisi ipsam animi! Perspiciatis placeat beatae possimus temporibus impedit illo doloribus velit modi eveniet vel officia reiciendis deleniti, commodi qui doloremque quibusdam in aspernatur, odio delectus rem?</p></div>
-            <form class="form" id="contactForm" method="post" novalidate action="/send-scripts.php">
+            <form class="form" id="contactForm" method="post" novalidate action="/send-script.php">
                 <div class="form-row form-row-name">
                     <label for="field-name">Name*</label>
                     <input type="text" name="name" required id="field-name" data-error="Wypełnij to pole" pattern="[a-zA-ZąĄććęęłŁńŃóÓśŚżŻŹŹ ]+" placeholder="Name and surname:">
@@ -193,6 +193,7 @@
             <div class="footer-item"></div>
             <div class="footer-copyright"></div>
         </section>
+        <script src="/socket.io/socket.io.js"></script>
     </body>
         
 </html>
