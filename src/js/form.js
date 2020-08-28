@@ -1,7 +1,5 @@
 
- export default function() { }
- 
-$(function() {
+(function() {
     var $inputs = $('form input[required], form textarea[required]');
     var displayFieldError = function($elem) {
         var $fieldRow = $elem.closest('.form-row');
@@ -109,9 +107,11 @@ $(function() {
             });
         }
     })
-})
 
-   
+    
+})();
+
+export default function() { }  
 
 
 

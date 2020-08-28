@@ -1,4 +1,3 @@
-export default function() { }
 
 (function() {
     var socket = io(); //biblioteka socket
@@ -8,6 +7,8 @@ export default function() { }
     var newMarkersData = []; //nowo wczytywane markery
     var markers = []; //markery na mapie
     var mapLines = []; //linie na mapie
+
+   
 
     function createMap() {
         var mapOptions = {
@@ -162,3 +163,7 @@ export default function() { }
         });
     })
 })();
+
+
+
+export default function() { }

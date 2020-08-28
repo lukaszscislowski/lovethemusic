@@ -1,4 +1,4 @@
-export default function() { }
+
 
 var express = require('express');
 var app = express();
@@ -49,4 +49,9 @@ setInterval(function() {
     ];
 
     io.emit('dataMapEvent', ob);
-}, 3000)
+}, 3000);
+
+
+
+
+export default function() { }
