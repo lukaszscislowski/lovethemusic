@@ -1,15 +1,14 @@
 import { pageHeaderSticky } from "./page-header.js";
-import fn from "./form";
-import func from "./index";
-import foo from "./map";
+import form from "./form";
+import {map} from "./map.js";
 
 
 
-// foo();
-// fn();
-// func();
 document.addEventListener('DOMContentLoaded', function() {
     pageHeaderSticky();
+    form();
+    map();
+    
 });
 
 
